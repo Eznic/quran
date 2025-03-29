@@ -212,11 +212,11 @@ int getVerseCount(int surahNumber) {
 
 ///Takes [surahNumber], [verseNumber] & [verseEndSymbol] (optional) and returns the Verse in Arabic
 String getVerse(int surahNumber, int verseNumber,
-    {bool verseEndSymbol = false}) {
+    {bool verseEndSymbol = false, Mushaf mushaf = Mushaf.uthmani}) {
   String verse = "";
   for (var i in quranText) {
     if (i['surah_number'] == surahNumber && i['verse_number'] == verseNumber) {
-      verse = i['content'].toString();
+      verse = i[mushaf.value].toString();
       break;
     }
   }
@@ -545,13 +545,13 @@ Map searchWordsInTranslation(List<String> words,
 ///```dart
 /// searchWords(["لِّلَّهِ","وَٱللَّهُ","ٱللَّهُ"])
 ///```
-Map searchWords(List<String> words) {
+Map searchWords(List<String> words, { Mushaf mushaf = Mushaf.uthmani }) {
   List<Map> result = [];
 
   for (var i in quranText) {
     bool exist = false;
     for (var word in words) {
-      if (i['content']
+      if (i[mushaf.value]
           .toString()
           .toLowerCase()
           .contains(word.toString().toLowerCase())) {
@@ -578,5 +578,21 @@ class RandomVerse {
     verseNumber = random.nextInt(getVerseCount(surahNumber)) + 1;
     verse = getVerse(surahNumber, verseNumber);
     translation = getVerseTranslation(surahNumber, verseNumber);
+  }
+}
+
+enum Mushaf {
+  uthmani,
+  indopak,
+}
+
+extension MushafExtension on Mushaf {
+  String get value {
+    switch (this) {
+      case Mushaf.uthmani:
+        return "uthmani";
+      case Mushaf.indopak:
+        return "indopak";
+    }
   }
 }
