@@ -595,4 +595,15 @@ extension RasmExtension on Rasm {
         return "indopak";
     }
   }
+
+  Rasm parse(String rasmStr) {
+    switch (rasmStr) {
+      case "uthmani":
+        return Rasm.uthmani;
+      case "indopak":
+        return Rasm.indopak;
+      default:
+        return Rasm.uthmani;
+    }
+  }
 }
